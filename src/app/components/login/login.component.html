@@ -1,0 +1,102 @@
+<div class="login-page">
+  <div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="login-card shadow-lg d-flex overflow-hidden">
+      
+      <!-- Left side (Welcome/Image panel) -->
+      <div class="d-none d-md-flex col-md-6 bg-gradient-brand text-white flex-column justify-content-center align-items-center p-5 position-relative left-panel">
+        <div class="z-1 text-center">
+          <h2 class="fw-bold mb-3 display-5">Welcome Back!</h2>
+          <p class="fs-5 mb-5 opacity-75">Sign in to continue exploring the best tech and lifestyle products.</p>
+        </div>
+        <!-- Decorative shapes -->
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+      </div>
+
+      <!-- Right side (Form panel) -->
+      <div class="col-12 col-md-6 form-panel p-5 bg-white d-flex flex-column justify-content-center">
+        <div class="text-center mb-5">
+          <div class="brand-icon mb-3">
+            <i class="bi bi-person-circle text-brand fs-1"></i>
+          </div>
+          <h2 class="login-title fw-bold">Sign In</h2>
+          <p class="login-subtitle text-muted">Mini E-Commerce Application</p>
+        </div>
+
+        <form (ngSubmit)="loginForm.valid && login()" #loginForm="ngForm" novalidate>
+          <div class="mb-4">
+            <div class="form-floating">
+              <input
+                type="email"
+                class="form-control"
+                [ngClass]="{
+                  'custom-input': true,
+                  'is-invalid': emailField.invalid && (emailField.dirty || emailField.touched)
+                }"
+                id="emailInput"
+                placeholder="name@example.com"
+                [(ngModel)]="email"
+                name="email"
+                #emailField="ngModel"
+                required
+                pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+              />
+              <label for="emailInput" class="text-muted"><i class="bi bi-envelope me-2"></i>Email address</label>
+            </div>
+            <div class="invalid-feedback text-start mt-1" *ngIf="emailField.invalid && (emailField.dirty || emailField.touched)">
+              <span *ngIf="emailField.errors?.['required']">Email is required.</span>
+              <span *ngIf="emailField.errors?.['pattern']">Please enter a valid email.</span>
+            </div>
+          </div>
+
+          <div class="mb-4 position-relative">
+            <div class="form-floating">
+              <input
+                [type]="showPassword ? 'text' : 'password'"
+                class="form-control"
+                [ngClass]="{
+                  'custom-input': true,
+                  'password-input': true,
+                  'is-invalid': passField.invalid && (passField.dirty || passField.touched)
+                }"
+                id="passwordInput"
+                placeholder="Password"
+                [(ngModel)]="password"
+                name="password"
+                #passField="ngModel"
+                required
+                minlength="6"
+              />
+              <label for="passwordInput" class="text-muted"><i class="bi bi-lock me-2"></i>Password</label>
+            </div>
+            
+            <button type="button" class="btn btn-link password-toggle text-decoration-none" (click)="togglePassword()" style="top: 29px;">
+              <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'"></i>
+            </button>
+            <div class="invalid-feedback text-start mt-1" *ngIf="passField.invalid && (passField.dirty || passField.touched)">
+               <span *ngIf="passField.errors?.['required']">Password is required.</span>
+               <span *ngIf="passField.errors?.['minlength']">Password must be at least 6 characters long.</span>
+            </div>
+          </div>
+
+          <div *ngIf="errorMessage" class="alert alert-danger py-2 border-0 shadow-sm d-flex align-items-center animate-shake">
+            <i class="bi bi-exclamation-circle-fill me-2"></i> {{ errorMessage }}
+          </div>
+
+          <button type="submit" class="btn login-btn w-100 mt-2 mb-4 d-flex justify-content-center align-items-center" [disabled]="loginForm.invalid || isLoading">
+            <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            {{ isLoading ? 'Signing In...' : 'Sign In' }}
+          </button>
+
+          <div class="text-center register-text mt-3">
+            <span class="text-muted">Don’t have an account?</span>
+            <a routerLink="/register" class="ms-1 fw-bold align-middle">
+              Create one <i class="bi bi-arrow-right-short align-middle"></i>
+            </a>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>

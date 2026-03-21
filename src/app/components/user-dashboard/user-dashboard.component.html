@@ -1,0 +1,205 @@
+<div class="container-fluid px-2 px-md-4 py-4">
+
+  <!-- Header Level -->
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3">
+    <h3 class="fw-bolder mb-3 mb-md-0 text-dark d-flex align-items-center"><i class="bi bi-shop me-2 text-primary"></i>
+      <span class="text-gradient">Storefront</span></h3>
+
+    <div class="d-flex align-items-center gap-3">
+      <button
+        class="btn btn-primary-custom rounded-pill px-4 py-2 fw-semibold shadow-sm d-flex align-items-center position-relative"
+        style="font-size: 0.9rem;" routerLink="/cart">
+        <i class="bi bi-cart3 me-2"></i> Cart
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary shadow-sm"
+          *ngIf="cartCount > 0" style="background: #1f2a44 !important; border: 1px solid white;">
+          {{ cartCount }}
+        </span>
+      </button>
+
+      <!-- User Profile Dropdown -->
+      <div class="dropdown position-relative">
+        <button
+          class="btn btn-white rounded-pill px-3 py-2 fw-semibold shadow-sm border d-flex align-items-center bg-white"
+          style="font-size: 0.9rem;" type="button" (click)="toggleDropdown()">
+          <i class="bi bi-person-circle me-1 text-primary"></i>
+          <span class="text-dark">{{ userRole }}</span>
+          <i class="bi bi-chevron-down ms-1 small text-muted"></i>
+        </button>
+
+        <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 mt-2 rounded-3"
+          [ngClass]="{'show': isDropdownOpen}"
+          [ngStyle]="{'display': isDropdownOpen ? 'block' : 'none', 'position': 'absolute', 'right': '0', 'z-index': '1050'}">
+          <li><a class="dropdown-item py-2 fw-medium" routerLink="/profile" (click)="toggleDropdown()"><i
+                class="bi bi-person-badge me-2 text-secondary"></i> View Profile</a></li>
+          <li><a class="dropdown-item py-2 fw-medium" routerLink="/profile" [queryParams]="{edit: 'true'}"
+              (click)="toggleDropdown()"><i class="bi bi-pencil-square me-2 text-secondary"></i> Edit Profile</a></li>
+          <li><a class="dropdown-item py-2 fw-medium" routerLink="/wishlist" (click)="toggleDropdown()"><i
+                class="bi bi-heart-fill me-2 text-danger"></i> Wishlist</a></li>
+          <li *ngIf="userRole === 'Admin'"><a class="dropdown-item py-2 fw-medium" routerLink="/admin-dashboard"
+              (click)="toggleDropdown()"><i class="bi bi-grid me-2 text-secondary"></i> Manage Products</a></li>
+          <li *ngIf="userRole === 'User'"><a class="dropdown-item py-2 fw-medium" routerLink="/my-orders"
+              (click)="toggleDropdown()"><i class="bi bi-box-seam me-2 text-secondary"></i> Orders</a></li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+          <li><a class="dropdown-item py-2 fw-bold text-danger" href="javascript:void(0)"
+              (click)="toggleDropdown(); logout()"><i class="bi bi-box-arrow-right me-2 text-danger"></i> Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero Search & Filter Section -->
+  <div class="hero-search-container rounded-4 mb-4 p-4 p-md-5 position-relative overflow-hidden shadow-sm"
+    style="background: linear-gradient(135deg, #1e293b 0%, #3b82f6 100%);">
+    <div class="position-absolute top-0 end-0 bg-white opacity-25"
+      style="width: 300px; height: 300px; border-radius: 50%; transform: translate(30%, -30%); filter: blur(40px);">
+    </div>
+    <div class="position-absolute bottom-0 start-0 bg-primary opacity-10"
+      style="width: 200px; height: 200px; border-radius: 50%; transform: translate(-30%, 30%); filter: blur(30px);">
+    </div>
+
+    <div class="position-relative z-1 text-center">
+      <h2 class="text-white fw-bold mb-4">What are you looking for today?</h2>
+
+      <!-- Clean Minimalist Search Bar -->
+      <div class="mx-auto" style="max-width: 600px;">
+        <div class="search-glass-container d-flex align-items-center bg-white p-2 rounded-pill shadow">
+          <i class="bi bi-search text-muted ps-3 pe-2 fs-5"></i>
+          <input [(ngModel)]="searchText" (ngModelChange)="applyFilters()" type="text"
+            class="form-control border-0 shadow-none bg-transparent py-2 fs-5 text-dark"
+            placeholder="Search products, brands...">
+          <button class="btn btn-primary-custom rounded-pill px-4 py-2 ms-2 fw-bold"
+            style="white-space: nowrap;">Search</button>
+        </div>
+      </div>
+
+      <!-- Compact Filters Row -->
+      <div class="d-flex justify-content-center flex-wrap gap-2 mt-4">
+        <div class="bg-white bg-opacity-75 rounded-pill px-3 py-1 shadow-sm d-flex align-items-center">
+          <i class="bi bi-grid-fill text-primary small me-2"></i>
+          <select [(ngModel)]="selectedCategory" (ngModelChange)="applyFilters()"
+            class="form-select select-sm-custom border-0 bg-transparent shadow-none fw-medium text-dark ps-0 pe-4 py-1"
+            style="cursor: pointer; min-width: 140px;">
+            <option value="">All Categories</option>
+            <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+          </select>
+        </div>
+
+        <div class="bg-white bg-opacity-75 rounded-pill px-3 py-1 shadow-sm d-flex align-items-center">
+          <i class="bi bi-tag-fill text-primary small me-2"></i>
+          <select [(ngModel)]="selectedPrice" (ngModelChange)="applyFilters()"
+            class="form-select select-sm-custom border-0 bg-transparent shadow-none fw-medium text-dark ps-0 pe-4 py-1"
+            style="cursor: pointer; min-width: 130px;">
+            <option value="">Any Price</option>
+            <option value="below1000">Under ₹1,000</option>
+            <option value="below5000">Under ₹5,000</option>
+            <option value="below10000">Under ₹10,000</option>
+            <option value="below50000">Under ₹50,000</option>
+          </select>
+        </div>
+
+        <button
+          class="btn btn-light rounded-pill px-3 py-1 fw-bold text-danger text-opacity-75 shadow-sm border-0 d-flex align-items-center select-sm-custom"
+          (click)="resetFilters()">
+          <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRODUCT CARDS -->
+  <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-3">
+    <div class="col-12 text-center py-5" *ngIf="filteredProducts.length === 0">
+      <i class="bi bi-search text-muted display-4 mb-3 d-block"></i>
+      <h5 class="fw-bold text-muted">No products found</h5>
+      <p class="text-muted small">Try removing active filters or tweaking your search terms.</p>
+    </div>
+
+    <div class="col" *ngFor="let product of filteredProducts">
+      <div class="card h-100 border-0 product-card position-relative shadow-sm rounded-3">
+
+        <!-- Image & Top Elements Container -->
+        <div class="product-img-wrapper position-relative overflow-hidden w-100">
+          <img [src]="product.imageUrl || 'https://via.placeholder.com/200?text=No+Image'" class="product-img"
+            alt="{{ product.name }}" (error)="product.imageUrl = 'https://via.placeholder.com/200?text=No+Image'">
+
+          <!-- Rating Overlay -->
+          <div class="rating-badge position-absolute bottom-0 start-0 m-2 px-1 py-1 text-dark d-flex align-items-center"
+            *ngIf="product.rating !== undefined">
+            <span class="fw-bold px-1" *ngIf="product.rating > 0">{{ product.rating | number:'1.1-1' }}</span>
+            <span class="fw-bold px-1" *ngIf="!product.rating || product.rating == 0">New</span>
+            <i class="bi bi-star-fill text-warning" style="font-size: 0.65rem;" *ngIf="product.rating > 0"></i>
+          </div>
+        </div>
+
+        <!-- Product Details -->
+        <div class="card-body d-flex flex-column p-2 pt-3">
+
+          <div class="d-flex justify-content-between align-items-center mb-1 px-1">
+            <span class="text-secondary fw-bold text-uppercase fs-7 tracking-wider" style="font-size: 0.65rem;">{{
+              product.brand || 'BRAND' }}</span>
+            <i class="bi cursor-pointer wishlist-icon"
+              [ngClass]="wishlistService.isInWishlist(product.id) ? 'bi-heart-fill text-danger' : 'bi-heart text-muted'"
+              (click)="toggleWishlist(product)" style="font-size: 1.1rem;"></i>
+          </div>
+
+          <h6 class="card-title fw-semibold mb-1 text-dark text-truncate px-1" style="font-size: 0.85rem;"
+            [title]="product.name">
+            {{ product.description || product.name }}
+          </h6>
+
+          <!-- Prices -->
+          <div class="d-flex align-items-center flex-wrap gap-1 mt-auto pt-1 mb-2 px-1">
+            <span class="fw-bolder text-dark" style="font-size: 1.05rem; letter-spacing: -0.5px;">₹{{ product.price
+              }}</span>
+            <span class="text-secondary text-decoration-line-through fw-medium" style="font-size: 0.70rem;"
+              *ngIf="product.price > 0">₹{{ product.price * 1.61 | number:'1.0-0' }}</span>
+          </div>
+
+          <!-- FIXED HEIGHT STABLE BUTTON: Switch between Default and Added states -->
+          <div class="mt-auto pt-2 border-top">
+            <button class="btn btn-primary-custom action-btn w-100 rounded-3" 
+                    [disabled]="product.quantity === 0" (click)="addToCart(product)">
+              
+              <!-- State 1: Default ADD TO CART (Centered) -->
+              <ng-container *ngIf="getProductCartQuantity(product.id) === 0">
+                <span class="fw-bold" style="font-size: 0.85rem; letter-spacing: 0.5px;">
+                  {{ product.quantity === 0 ? 'OUT OF STOCK' : 'ADD TO CART' }}
+                </span>
+              </ng-container>
+
+              <!-- State 2: Split Add More +X (Flex Distributed) -->
+              <div class="d-flex w-100 h-100" *ngIf="getProductCartQuantity(product.id) > 0">
+                <div class="btn-left h-100">
+                  <i class="bi bi-cart-plus-fill me-1"></i> Add More
+                </div>
+                <!-- Clean Space Gap -->
+                <div class="btn-right h-100">
+                  +{{ getProductCartQuantity(product.id) }}
+                </div>
+              </div>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Standard Professional Toast Notification -->
+  <div class="toast-container position-fixed bottom-0 start-50 translate-middle-x pb-4" style="z-index: 2000;">
+    <div class="toast show align-items-center text-white border-0 shadow-lg px-3 py-1 scale-in" *ngIf="showToast"
+      style="background: rgba(31, 42, 68, 0.95); backdrop-filter: blur(10px); border-radius: 12px; min-width: 300px;">
+      <div class="d-flex">
+        <div class="toast-body d-flex align-items-center fw-medium">
+          <i class="bi bi-check-circle-fill text-success me-2 fs-5"></i>
+          {{ toastMessage }}
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" (click)="showToast = false"></button>
+      </div>
+    </div>
+  </div>
+
+</div>

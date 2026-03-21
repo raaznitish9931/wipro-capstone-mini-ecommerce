@@ -1,0 +1,52 @@
+<app-navbar></app-navbar>
+
+<div class="container py-5">
+  <div class="d-flex align-items-center mb-5 pb-3 border-bottom">
+    <button class="btn btn-light rounded-circle shadow-sm me-3 border" routerLink="/user-dashboard" style="width: 50px; height: 50px; border-color: #ddd !important;">
+      <i class="bi bi-arrow-left"></i>
+    </button>
+    <div>
+      <h2 class="fw-bolder mb-1 text-dark display-6">My Wishlist</h2>
+      <p class="text-muted fw-medium mb-0" *ngIf="wishlistItems.length > 0">You have {{ wishlistItems.length }} items saved.</p>
+    </div>
+  </div>
+
+  <div *ngIf="wishlistItems.length === 0" class="text-center py-5">
+    <div style="background-color: #f8f9fa; border-radius: 20px; max-width: 500px; margin: 0 auto;" class="p-5 shadow-sm border">
+      <i class="bi bi-heart display-1 text-muted mb-3 d-inline-block"></i>
+      <h3 class="fw-bolder text-dark">Your wishlist is empty</h3>
+      <p class="text-muted fw-medium mb-4">You haven't added any items to your wishlist yet. Explore our store and save your favorites!</p>
+      <button class="btn btn-primary px-5 py-3 fw-bold rounded-pill shadow-sm" style="background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%); border: none;" routerLink="/user-dashboard">Find Products</button>
+    </div>
+  </div>
+
+  <div *ngIf="wishlistItems.length > 0" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+    <div class="col" *ngFor="let product of wishlistItems">
+      <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden position-relative product-card">
+        
+        <!-- Remove Button -->
+        <button class="btn btn-white position-absolute top-0 end-0 m-2 rounded-circle shadow-sm border p-0 d-flex align-items-center justify-content-center" 
+                style="width: 32px; height: 32px; z-index: 10;" (click)="removeFromWishlist(product)">
+          <i class="bi bi-x-lg text-danger" style="font-size: 0.9rem;"></i>
+        </button>
+
+        <div class="p-3 text-center bg-light" style="height: 180px; display: flex; align-items: center; justify-content: center;">
+          <img [src]="product.imageUrl || 'https://via.placeholder.com/150'" class="img-fluid" style="max-height: 100%; object-fit: contain;">
+        </div>
+
+        <div class="card-body d-flex flex-column p-4">
+          <span class="text-secondary fw-bold text-uppercase mb-1" style="font-size: 0.65rem;">{{ product.brand || 'Category' }}</span>
+          <h6 class="fw-bold text-dark mb-2 text-truncate">{{ product.name }}</h6>
+          
+          <div class="mt-auto">
+            <div class="fs-5 fw-bolder text-primary mb-3">₹{{ product.price | number:'1.0-0' }}</div>
+            
+            <button class="btn btn-primary-custom w-100 py-2 fw-bold rounded-pill" (click)="addToCart(product)">
+              <i class="bi bi-cart-plus me-2"></i> Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+<div class="modal-overlay" *ngIf="isOpen" (click)="onCancel()">
+  <div class="modal-card shadow-lg" (click)="$event.stopPropagation()">
+    <div class="modal-header border-bottom">
+      <h5 class="modal-title fw-bold text-dark">{{ title }}</h5>
+      <button type="button" class="btn-close" (click)="onCancel()"></button>
+    </div>
+    <div class="modal-body py-4">
+      <p class="mb-0 text-muted fw-medium fs-6">{{ message }}</p>
+    </div>
+    <div class="modal-footer border-top bg-light">
+      <button type="button" class="btn btn-light px-4 fw-semibold" (click)="onCancel()">{{ cancelText }}</button>
+      <button type="button" class="btn btn-danger px-4 fw-bold" (click)="onConfirm()">{{ confirmText }}</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,43 @@
+<app-navbar></app-navbar>
+
+<div class="container py-5 mt-4">
+  <div class="text-center mb-5">
+    <h2 class="fw-bolder display-5 mb-2 text-gradient">Admin Dashboard</h2>
+    <p class="text-muted fs-5">Manage your entire product catalogue and secure inventory.</p>
+  </div>
+
+  <div class="row g-4 justify-content-center">
+    <!-- Card 1 -->
+    <div class="col-md-4">
+      <a routerLink="/add-product" class="card shadow-sm admin-card card-primary p-5 text-center h-100">
+        <div class="icon-wrapper">
+          <i class="bi bi-node-plus-fill"></i>
+        </div>
+        <h4 class="fw-bold mb-2">Add Product</h4>
+        <p class="mb-0 text-white-50">Create and list a new product entry directly into the live database.</p>
+      </a>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="col-md-4">
+      <a routerLink="/product-list" class="card shadow-sm admin-card card-success p-5 text-center h-100">
+        <div class="icon-wrapper">
+          <i class="bi bi-view-list"></i>
+        </div>
+        <h4 class="fw-bold mb-2">Product List</h4>
+        <p class="mb-0 text-white-50">View, track, and manage all your officially listed store products.</p>
+      </a>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="col-md-4">
+      <a routerLink="/product-list" class="card shadow-sm admin-card card-warning p-5 text-center h-100">
+        <div class="icon-wrapper">
+          <i class="bi bi-box-seam-fill"></i>
+        </div>
+        <h4 class="fw-bold mb-2">Manage Inventory</h4>
+        <p class="mb-0 text-white-50">Quickly edit product details, adjust configurations, or remove items permanently.</p>
+      </a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,138 @@
+<nav class="navbar navbar-expand-lg px-4 custom-navbar shadow-sm py-3 mb-4 bg-primary text-white">
+  <div class="d-flex align-items-center w-100">
+    <div class="bg-white rounded p-1 me-2 d-flex align-items-center justify-content-center"
+      style="width: 32px; height: 32px;">
+      <i class="bi bi-shop text-primary"></i>
+    </div>
+    <a class="navbar-brand fw-bold text-white mb-0" href="javascript:void(0)">Storefront</a>
+    <div class="ms-auto">
+      <a routerLink="/cart" class="text-white text-decoration-none fw-medium"><i class="bi bi-cart me-1"></i> Return to
+        Cart</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container py-4 payment-container">
+
+  <div class="d-flex align-items-center mb-4">
+    <button class="btn btn-light rounded-circle shadow-sm me-3 border" routerLink="/cart"
+      style="width: 45px; height: 45px; transition: none;">
+      <i class="bi bi-arrow-left"></i>
+    </button>
+    <h2 class="fw-bolder mb-0 display-6">Checkout</h2>
+  </div>
+
+  <div *ngIf="!paymentSuccess" class="payment-card p-4 p-md-5 mb-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+      <h4 class="fw-bold mb-0">Total Amount</h4>
+      <h3 class="fw-bolder text-primary mb-0">₹{{ totalAmount | number:'1.0-0' }}</h3>
+    </div>
+
+    <h5 class="fw-bold mb-3">Select Payment Method</h5>
+
+    <!-- Debit Card Option -->
+    <div class="method-option d-flex align-items-center border-0shadow-sm" [class.selected]="paymentMethod === 'debit'"
+      (click)="paymentMethod = 'debit'">
+      <div class="form-check m-0 d-flex align-items-center w-100">
+        <input class="form-check-input mt-0 me-3" type="radio" name="paymentMethod" id="debit" value="debit"
+          [(ngModel)]="paymentMethod" style="width: 20px; height: 20px;">
+        <label class="form-check-label w-100 fw-bold d-flex align-items-center" for="debit" style="cursor: pointer;">
+          <i class="bi bi-credit-card-2-front fs-4 me-3 text-secondary"></i>
+          Debit Card
+        </label>
+      </div>
+    </div>
+
+    <!-- Credit Card Option -->
+    <div class="method-option d-flex align-items-center shadow-sm" [class.selected]="paymentMethod === 'credit'"
+      (click)="paymentMethod = 'credit'">
+      <div class="form-check m-0 d-flex align-items-center w-100">
+        <input class="form-check-input mt-0 me-3" type="radio" name="paymentMethod" id="credit" value="credit"
+          [(ngModel)]="paymentMethod" style="width: 20px; height: 20px;">
+        <label class="form-check-label w-100 fw-bold d-flex align-items-center" for="credit" style="cursor: pointer;">
+          <i class="bi bi-credit-card fs-4 me-3 text-secondary"></i>
+          Credit Card
+        </label>
+      </div>
+    </div>
+
+    <!-- UPI Option -->
+    <div class="method-option d-flex align-items-center shadow-sm" [class.selected]="paymentMethod === 'upi'"
+      (click)="paymentMethod = 'upi'">
+      <div class="form-check m-0 d-flex align-items-center w-100">
+        <input class="form-check-input mt-0 me-3" type="radio" name="paymentMethod" id="upi" value="upi"
+          [(ngModel)]="paymentMethod" style="width: 20px; height: 20px;">
+        <label class="form-check-label w-100 fw-bold d-flex align-items-center" for="upi" style="cursor: pointer;">
+          <i class="bi bi-phone fs-4 me-3 text-secondary"></i>
+          UPI
+        </label>
+      </div>
+    </div>
+
+    <div class="mt-4 pt-3" *ngIf="paymentMethod === 'credit' || paymentMethod === 'debit'">
+      <div class="mb-3">
+        <label class="form-label fw-medium">Card Number</label>
+        <input type="text" class="form-control form-control-lg bg-light" [(ngModel)]="cardNumber"
+          placeholder="0000 0000 0000 0000" maxlength="19">
+        <small class="text-muted" *ngIf="cardNumber.length < 16 && cardNumber.length > 0">Enter 16-digit card
+          number</small>
+      </div>
+      <div class="row">
+        <div class="col-6 mb-3">
+          <label class="form-label fw-medium">Expiry</label>
+          <input type="text" class="form-control form-control-lg bg-light" [(ngModel)]="expiry" placeholder="MM/YY"
+            maxlength="5">
+          <small class="text-muted" *ngIf="expiry.length >0 && expiry.length < 5">Format: MM/YY</small>
+        </div>
+        <div class="col-6 mb-3">
+          <label class="form-label fw-medium">CVV</label>
+          <input type="password" class="form-control form-control-lg bg-light" [(ngModel)]="cvv" placeholder="•••"
+            maxlength="3">
+          <small class="text-muted" *ngIf="cvv.length > 0 && cvv.length < 3">Enter 3 digits</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4 pt-3" *ngIf="paymentMethod === 'upi'">
+      <div class="mb-3">
+        <label class="form-label fw-medium">UPI ID</label>
+        <input type="text" class="form-control form-control-lg bg-light" [(ngModel)]="upiId" placeholder="example@upi">
+        <small class="text-muted" *ngIf="upiId.length > 0 && !upiId.includes('@')">Enter a valid UPI ID (must include
+          &#64;)</small>
+      </div>
+    </div>
+
+    <button class="btn btn-primary w-100 mt-4 rounded-pill py-3 fw-bold shadow-sm"
+      style="font-size: 1.1rem; transition: none; animation: none;" (click)="processPayment()"
+      [disabled]="isProcessing || !isFormValid">
+      <span *ngIf="!isProcessing"><i class="bi bi-lock-fill me-2"></i> Pay ₹{{ totalAmount | number:'1.0-0' }}
+        securely</span>
+      <span *ngIf="isProcessing">
+        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+        Processing Payment...
+      </span>
+    </button>
+  </div>
+
+  <!-- Success Message -->
+  <div *ngIf="paymentSuccess" class="payment-card text-center p-5">
+    <div class="d-inline-flex justify-content-center align-items-center bg-success bg-opacity-10 rounded-circle mb-4"
+      style="width: 90px; height: 90px;">
+      <i class="bi bi-check-circle-fill text-success" style="font-size: 3rem;"></i>
+    </div>
+    <h2 class="fw-bolder text-dark mb-3">Payment Successful!</h2>
+    <p class="text-secondary fw-medium fs-5 mb-4">Your order has been confirmed.</p>
+    <div
+      class="d-flex justify-content-center border border-success border-opacity-25 rounded-3 bg-light py-3 px-4 mx-auto mb-4"
+      style="max-width: 300px;">
+      <span class="text-muted fw-bold me-3">Amount Paid:</span>
+      <span class="fw-bolder fs-5 text-dark">₹{{ totalAmount | number:'1.0-0' }}</span>
+    </div>
+    <button class="btn btn-primary rounded-pill px-5 py-3 fw-bold mt-2" routerLink="/user-dashboard"
+      style="transition: none; animation: none;">
+      <i class="bi bi-house-door-fill me-2"></i> Home Dashboard
+    </button>
+  </div>
+
+</div>

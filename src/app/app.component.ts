@@ -1,12 +1,23 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+
+
+  imports: [RouterOutlet, CommonModule, FormsModule],
+
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'mini-ecomm-frontend';
+
+  constructor(public router: Router) {}
+
+  isAuthPage(): boolean {
+    return this.router.url === '/login' || this.router.url === '/register';
+  }
 }

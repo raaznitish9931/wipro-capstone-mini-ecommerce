@@ -1,0 +1,135 @@
+.login-page {
+  min-height: 100vh;
+  background: #f8f9fc;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 900px;
+  background: #fff;
+  border-radius: 20px;
+  border: none;
+}
+
+.bg-gradient-brand {
+  background: linear-gradient(135deg, #1f2a44, #39528f);
+  overflow: hidden;
+}
+
+.left-panel,
+.form-panel {
+  min-height: 550px;
+}
+
+.text-brand {
+  color: #39528f;
+}
+
+/* Decorative Background Shapes */
+.shape {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.shape-1 {
+  width: 300px;
+  height: 300px;
+  top: -50px;
+  left: -50px;
+}
+
+.shape-2 {
+  width: 200px;
+  height: 200px;
+  bottom: -30px;
+  right: -30px;
+}
+
+.login-title {
+  color: #1f2a44;
+  letter-spacing: -0.5px;
+}
+
+.custom-input {
+  height: 58px;
+  border-radius: 12px;
+  border: 1px solid #e1e5ee;
+  background-color: #fcfcfd;
+  box-shadow: none;
+  font-weight: 500;
+}
+
+.custom-input:focus {
+  border-color: #39528f;
+  background-color: #fff;
+  box-shadow: 0 0 0 4px rgba(57, 82, 143, 0.1);
+}
+
+.form-floating label {
+  color: #8c98a4;
+}
+
+.custom-input:focus~label,
+.custom-input:not(:placeholder-shown)~label {
+  color: #39528f;
+  font-weight: 600;
+}
+
+.password-input {
+  padding-right: 50px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8c98a4;
+  font-size: 1.2rem;
+}
+
+.login-btn {
+  height: 56px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #39528f, #1f2a44);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 15px rgba(31, 42, 68, 0.2);
+}
+
+.register-text a {
+  text-decoration: none;
+  color: #39528f;
+}
+
+/* Error Shake Animation */
+@keyframes shake {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-5px);
+  }
+
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(5px);
+  }
+}
+
+.animate-shake {
+  animation: shake 0.4s ease-in-out;
+}

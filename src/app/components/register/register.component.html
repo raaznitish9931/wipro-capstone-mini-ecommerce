@@ -1,0 +1,157 @@
+<div class="login-page">
+  <div class="container d-flex justify-content-center align-items-center min-vh-100 py-5">
+    <div class="login-card shadow-lg bg-white p-4 p-md-5 overflow-hidden mx-auto" style="max-width: 550px; width: 100%;">
+    <div class="text-center mb-4">
+      <h1 class="login-title small-title">Register</h1>
+      <p class="login-subtitle">Create your account</p>
+    </div>
+
+    <form (ngSubmit)="registerForm.valid && register()" #registerForm="ngForm" novalidate>
+      <div class="mb-3">
+        <input
+          class="form-control"
+          [ngClass]="{
+            'custom-input': true,
+            'is-invalid': nameField.invalid && (nameField.dirty || nameField.touched)
+          }"
+          placeholder="Full Name"
+          [(ngModel)]="user.name"
+          name="name"
+          #nameField="ngModel"
+          required
+        >
+        <div class="invalid-feedback" *ngIf="nameField.invalid && (nameField.dirty || nameField.touched)">
+          Full name is required.
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <input
+          class="form-control"
+          [ngClass]="{
+            'custom-input': true,
+            'is-invalid': emailField.invalid && (emailField.dirty || emailField.touched)
+          }"
+          type="email"
+          placeholder="Email Address"
+          [(ngModel)]="user.email"
+          name="email"
+          #emailField="ngModel"
+          required
+          pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+        >
+        <div class="invalid-feedback" *ngIf="emailField.invalid && (emailField.dirty || emailField.touched)">
+          <span *ngIf="emailField.errors?.['required']">Email is required.</span>
+          <span *ngIf="emailField.errors?.['pattern']">Please enter a valid email address.</span>
+        </div>
+      </div>
+
+      <div class="mb-3 position-relative">
+        <input
+          class="form-control"
+          [ngClass]="{
+            'custom-input': true,
+            'password-input': true,
+            'is-invalid': passField.invalid && (passField.dirty || passField.touched)
+          }"
+          [type]="showPassword ? 'text' : 'password'"
+          placeholder="Password"
+          [(ngModel)]="user.password"
+          name="password"
+          #passField="ngModel"
+          required
+          minlength="6"
+        >
+        <button type="button" class="btn btn-link password-toggle text-decoration-none shadow-none border-0" (click)="togglePassword()" style="top: 15px;">
+          <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'"></i>
+        </button>
+        <div class="invalid-feedback" *ngIf="passField.invalid && (passField.dirty || passField.touched)">
+          <span *ngIf="passField.errors?.['required']">Password is required.</span>
+          <span *ngIf="passField.errors?.['minlength']">Password must be at least 6 characters long.</span>
+        </div>
+      </div>
+
+      <div class="mb-3 position-relative">
+        <input
+          class="form-control"
+          [ngClass]="{
+            'custom-input': true,
+            'password-input': true,
+            'is-invalid': (confirmField.invalid || confirmPassword !== user.password) && (confirmField.dirty || confirmField.touched)
+          }"
+          [type]="showConfirmPassword ? 'text' : 'password'"
+          placeholder="Confirm Password"
+          [(ngModel)]="confirmPassword"
+          name="confirmPassword"
+          #confirmField="ngModel"
+          required
+        >
+        <button type="button" class="btn btn-link password-toggle text-decoration-none shadow-none border-0" (click)="toggleConfirmPassword()" style="top: 15px;">
+          <i class="bi" [ngClass]="showConfirmPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'"></i>
+        </button>
+        <div class="invalid-feedback" *ngIf="(confirmField.invalid || confirmPassword !== user.password) && (confirmField.dirty || confirmField.touched)">
+          <span *ngIf="confirmField.errors?.['required']">Please confirm your password.</span>
+          <span *ngIf="confirmPassword !== user.password && !confirmField.errors?.['required']">Passwords do not match.</span>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <input
+          class="form-control"
+          [ngClass]="{
+            'custom-input': true,
+            'is-invalid': addressField.invalid && (addressField.dirty || addressField.touched)
+          }"
+          placeholder="Delivery Address"
+          [(ngModel)]="user.address"
+          name="address"
+          #addressField="ngModel"
+          required
+        >
+        <div class="invalid-feedback" *ngIf="addressField.invalid && (addressField.dirty || addressField.touched)">
+          Delivery address is required.
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <select
+          class="form-select"
+          [ngClass]="{
+            'custom-input': true,
+            'is-invalid': roleField.invalid && (roleField.dirty || roleField.touched)
+          }"
+          [(ngModel)]="user.role"
+          name="role"
+          #roleField="ngModel"
+          required
+        >
+          <option value="">Select Role</option>
+          <option value="USER">User</option>
+          <option value="ADMIN">Admin</option>
+        </select>
+        <div class="invalid-feedback" *ngIf="roleField.invalid && (roleField.dirty || roleField.touched)">
+          User role is required.
+        </div>
+      </div>
+
+      <div *ngIf="errorMessage" class="alert alert-danger py-2">
+        {{ errorMessage }}
+      </div>
+
+      <div *ngIf="successMessage" class="alert alert-success py-2">
+        {{ successMessage }}
+      </div>
+
+      <button type="submit" class="btn login-btn w-100 d-flex justify-content-center align-items-center" [disabled]="registerForm.invalid || confirmPassword !== user.password || isLoading">
+        <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+        {{ isLoading ? 'Creating Account...' : 'Register' }}
+      </button>
+
+      <div class="text-center register-text mt-4">
+        Already have an account?
+        <a routerLink="/login" class="fw-bold">Login here <i class="bi bi-arrow-right-short align-middle"></i></a>
+      </div>
+    </form>
+  </div>
+ </div>
+</div>

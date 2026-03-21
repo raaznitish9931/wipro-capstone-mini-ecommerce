@@ -1,0 +1,27 @@
+<div class="container mt-4" *ngIf="product">
+  <div class="row">
+    <div class="col-md-5">
+      <img [src]="product.imageUrl" class="img-fluid rounded shadow" alt="product">
+    </div>
+
+    <div class="col-md-7">
+      <h2>{{ product.name }}</h2>
+      <p><strong>Brand:</strong> {{ product.brand }}</p>
+      <p><strong>Category:</strong> {{ product.category }}</p>
+      <p><strong>Description:</strong> {{ product.description }}</p>
+      <h4 class="text-success">₹ {{ product.price }}</h4>
+
+      <div class="mb-3 mt-3">
+        <label>Quantity</label>
+        <input type="number" class="form-control w-25" min="1" [(ngModel)]="quantity">
+      </div>
+
+      <div class="d-flex gap-2">
+        <button class="btn btn-primary" (click)="addToCart()">Add to Cart</button>
+        <button class="btn btn-outline-danger">Wishlist</button>
+      </div>
+
+      <p class="text-success mt-3">{{ message }}</p>
+    </div>
+  </div>
+</div>
