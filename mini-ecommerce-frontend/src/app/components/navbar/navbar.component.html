@@ -21,7 +21,7 @@
     <div class="dropdown position-relative">
       <button class="btn btn-outline-light rounded-pill px-4 py-2 fw-semibold border d-flex align-items-center" type="button" (click)="toggleDropdown()">
         <i class="bi bi-person-circle me-2 fs-5"></i> 
-        <span>{{ userRole }}</span>
+        <span>{{ user?.name || userRole }}</span>
         <i class="bi bi-chevron-down ms-2 small"></i>
       </button>
       

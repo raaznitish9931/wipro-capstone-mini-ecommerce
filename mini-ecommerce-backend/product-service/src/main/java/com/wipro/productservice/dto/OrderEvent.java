@@ -11,9 +11,11 @@ public class OrderEvent {
     private int quantity;
     private LocalDateTime timestamp;
 
-    public OrderEvent() {}
+    public OrderEvent() {
+    }
 
-    public OrderEvent(String event, int orderId, int productId, String productName, int quantity, LocalDateTime timestamp) {
+    public OrderEvent(String event, int orderId, int productId, String productName, int quantity,
+            LocalDateTime timestamp) {
         this.event = event;
         this.orderId = orderId;
         this.productId = productId;
@@ -23,17 +25,51 @@ public class OrderEvent {
     }
 
     // getters & setters
-    public String getEvent() { return event; }
-    public int getOrderId() { return orderId; }
-    public int getProductId() { return productId; }
-    public String getProductName() { return productName; }
-    public int getQuantity() { return quantity; }
-    public LocalDateTime getTimestamp() { return timestamp; }
+    public String getEvent() {
+        return event;
+    }
 
-    public void setEvent(String event) { this.event = event; }
-    public void setOrderId(int orderId) { this.orderId = orderId; }
-    public void setProductId(int productId) { this.productId = productId; }
-    public void setProductName(String productName) { this.productName = productName; }
-    public void setQuantity(int quantity) { this.quantity = quantity; }
-    public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
+    public int getOrderId() {
+        return orderId;
+    }
+
+    public int getProductId() {
+        return productId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setEvent(String event) {
+        this.event = event;
+    }
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
+    }
 }
