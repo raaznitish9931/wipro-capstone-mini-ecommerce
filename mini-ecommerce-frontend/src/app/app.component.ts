@@ -1,0 +1,23 @@
+import { Component } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+
+@Component({
+  selector: 'app-root',
+  standalone: true,
+
+
+  imports: [RouterOutlet, CommonModule, FormsModule],
+
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+
+  constructor(public router: Router) {}
+
+  isAuthPage(): boolean {
+    return this.router.url === '/login' || this.router.url === '/register';
+  }
+}

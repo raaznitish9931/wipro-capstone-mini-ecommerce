@@ -1,0 +1,185 @@
+<app-navbar></app-navbar>
+
+<div class="container-fluid px-2 px-md-4 py-4">
+
+  <!-- Hero Search & Filter Section -->
+  <div class="hero-search-container rounded-4 mb-4 p-4 p-md-5 position-relative overflow-hidden shadow-sm"
+    style="background: linear-gradient(135deg, #1e293b 0%, #3b82f6 100%);">
+    <div class="position-absolute top-0 end-0 bg-white opacity-25"
+      style="width: 300px; height: 300px; border-radius: 50%; transform: translate(30%, -30%); filter: blur(40px);">
+    </div>
+    <div class="position-absolute bottom-0 start-0 bg-primary opacity-10"
+      style="width: 200px; height: 200px; border-radius: 50%; transform: translate(-30%, 30%); filter: blur(30px);">
+    </div>
+
+    <div class="position-relative z-1 text-center">
+      <h2 class="text-white fw-bold mb-4">What are you looking for today?</h2>
+
+      <!-- Clean Minimalist Search Bar -->
+      <div class="mx-auto" style="max-width: 600px;">
+        <div class="search-glass-container d-flex align-items-center bg-white p-2 rounded-pill shadow">
+          <i class="bi bi-search text-muted ps-3 pe-2 fs-5"></i>
+          <input [(ngModel)]="searchText" (ngModelChange)="applyFilters()" type="text"
+            class="form-control border-0 shadow-none bg-transparent py-2 fs-5 text-dark"
+            placeholder="Search products, brands...">
+          <button class="btn btn-primary-custom rounded-pill px-4 py-2 ms-2 fw-bold"
+            style="white-space: nowrap;">Search</button>
+        </div>
+      </div>
+
+      <!-- Compact Filters Row -->
+      <div class="d-flex justify-content-center flex-wrap gap-2 mt-4">
+        <div class="bg-white bg-opacity-75 rounded-pill px-3 py-1 shadow-sm d-flex align-items-center">
+          <i class="bi bi-grid-fill text-primary small me-2"></i>
+          <select [(ngModel)]="selectedCategory" (ngModelChange)="applyFilters()"
+            class="form-select select-sm-custom border-0 bg-transparent shadow-none fw-medium text-dark ps-0 pe-4 py-1"
+            style="cursor: pointer; min-width: 140px;">
+            <option value="">All Categories</option>
+            <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+          </select>
+        </div>
+
+        <div class="bg-white bg-opacity-75 rounded-pill px-3 py-1 shadow-sm d-flex align-items-center">
+          <i class="bi bi-tag-fill text-primary small me-2"></i>
+          <select [(ngModel)]="selectedPrice" (ngModelChange)="applyFilters()"
+            class="form-select select-sm-custom border-0 bg-transparent shadow-none fw-medium text-dark ps-0 pe-4 py-1"
+            style="cursor: pointer; min-width: 130px;">
+            <option value="">Any Price</option>
+            <option value="below1000">Under ₹1,000</option>
+            <option value="below5000">Under ₹5,000</option>
+            <option value="below10000">Under ₹10,000</option>
+            <option value="below50000">Under ₹50,000</option>
+          </select>
+        </div>
+
+        <button
+          class="btn btn-light rounded-pill px-3 py-1 fw-bold text-danger text-opacity-75 shadow-sm border-0 d-flex align-items-center select-sm-custom"
+          (click)="resetFilters()">
+          <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loader State -->
+  <div *ngIf="loading" class="row justify-content-center py-5">
+    <div class="col-12 text-center my-5 d-flex flex-column align-items-center">
+      <div class="spinner-border text-primary border-4 mb-3" style="width: 3rem; height: 3rem;" role="status">
+        <span class="visually-hidden">Loading products...</span>
+      </div>
+      <h5 class="fw-bold text-muted">Retrieving catalog...</h5>
+    </div>
+  </div>
+
+  <!-- Error State (Service Down) -->
+  <div *ngIf="errorMessage" class="row justify-content-center py-5">
+    <div class="col-12 col-md-8 text-center">
+      <div class="card border-0 shadow-sm rounded-4 p-5 bg-white">
+        <i class="bi bi-cone-striped display-1 text-warning mb-3 d-inline-block"></i>
+        <h3 class="fw-bolder text-dark mb-2">{{ errorMessage }}</h3>
+        <p class="text-muted fw-medium mb-4">We are experiencing technical difficulties connecting to our services. Please ensure microservices are actively running.</p>
+        <button class="btn btn-primary-custom px-4 py-2 rounded-pill fw-bold shadow-sm" (click)="loadProducts()">Retry Connection</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRODUCT CARDS -->
+  <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-3" *ngIf="!loading && !errorMessage">
+    <div class="col-12 text-center py-5" *ngIf="filteredProducts.length === 0">
+      <i class="bi bi-search text-muted display-4 mb-3 d-block"></i>
+      <h5 class="fw-bold text-muted">No products found</h5>
+      <p class="text-muted small">Try removing active filters or tweaking your search terms.</p>
+    </div>
+
+    <div class="col" *ngFor="let product of filteredProducts">
+      <div class="card h-100 border-0 product-card position-relative shadow-sm rounded-3">
+
+        <!-- Image & Top Elements Container -->
+        <div class="product-img-wrapper position-relative overflow-hidden w-100">
+          <img [src]="product.imageUrl || 'https://via.placeholder.com/200?text=No+Image'" class="product-img"
+            alt="{{ product.name }}" (error)="product.imageUrl = 'https://via.placeholder.com/200?text=No+Image'">
+
+          <!-- Rating Overlay -->
+          <div class="rating-badge position-absolute bottom-0 start-0 m-2 px-1 py-1 text-dark d-flex align-items-center"
+            *ngIf="product.rating !== undefined">
+            <span class="fw-bold px-1" *ngIf="product.rating > 0">{{ product.rating | number:'1.1-1' }}</span>
+            <span class="fw-bold px-1" *ngIf="!product.rating || product.rating == 0">New</span>
+            <i class="bi bi-star-fill text-warning" style="font-size: 0.65rem;" *ngIf="product.rating > 0"></i>
+          </div>
+        </div>
+
+        <!-- Product Details -->
+        <div class="card-body d-flex flex-column p-2 pt-3">
+
+          <div class="d-flex justify-content-between align-items-center mb-1 px-1">
+            <span class="text-secondary fw-bold text-uppercase fs-7 tracking-wider" style="font-size: 0.65rem;">{{
+              product.brand || 'BRAND' }}</span>
+            <i class="bi cursor-pointer wishlist-icon"
+              [ngClass]="wishlistService.isInWishlist(product.id) ? 'bi-heart-fill text-danger' : 'bi-heart text-muted'"
+              (click)="toggleWishlist(product)" style="font-size: 1.1rem;"></i>
+          </div>
+
+          <h6 class="card-title fw-semibold mb-1 text-dark text-truncate px-1" style="font-size: 0.85rem;"
+            [title]="product.name">
+            {{ product.description || product.name }}
+          </h6>
+
+          <!-- Prices -->
+          <div class="d-flex align-items-center flex-wrap gap-1 mt-auto pt-1 mb-2 px-1">
+            <span class="fw-bolder text-dark" style="font-size: 1.05rem; letter-spacing: -0.5px;">₹{{ product.price
+              }}</span>
+            <span class="text-secondary text-decoration-line-through fw-medium" style="font-size: 0.70rem;"
+              *ngIf="product.price > 0">₹{{ product.price * 1.61 | number:'1.0-0' }}</span>
+          </div>
+
+          <!-- FIXED HEIGHT STABLE BUTTON: Switch between Default and Added states -->
+          <div class="mt-auto pt-2 border-top">
+            <ng-container *ngIf="product.quantity > 0; else outOfStock">
+              <button class="btn btn-primary-custom action-btn w-100 rounded-3" (click)="addToCart(product)">
+                
+                <!-- State 1: Default ADD TO CART (Centered) -->
+                <ng-container *ngIf="getProductCartQuantity(product.id) === 0">
+                  <span class="fw-bold" style="font-size: 0.85rem; letter-spacing: 0.5px;">
+                    ADD TO CART
+                  </span>
+                </ng-container>
+
+                <!-- State 2: Split Add More +X (Flex Distributed) -->
+                <div class="d-flex w-100 h-100" *ngIf="getProductCartQuantity(product.id) > 0">
+                  <div class="btn-left h-100">
+                    <i class="bi bi-cart-plus-fill me-1"></i> Add More
+                  </div>
+                  <!-- Clean Space Gap -->
+                  <div class="btn-right h-100">
+                    +{{ getProductCartQuantity(product.id) }}
+                  </div>
+                </div>
+              </button>
+            </ng-container>
+            <ng-template #outOfStock>
+              <div class="w-100 text-center py-2 rounded-3 bg-danger bg-opacity-10 text-danger fw-bold border border-danger border-opacity-50" style="font-size: 0.85rem; letter-spacing: 0.5px;">
+                OUT OF STOCK
+              </div>
+            </ng-template>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Standard Professional Toast Notification -->
+  <div class="toast-container position-fixed bottom-0 start-50 translate-middle-x pb-4" style="z-index: 2000;">
+    <div class="toast show align-items-center text-white border-0 shadow-lg px-3 py-1 scale-in" *ngIf="showToast"
+      style="background: rgba(31, 42, 68, 0.95); backdrop-filter: blur(10px); border-radius: 12px; min-width: 300px;">
+      <div class="d-flex">
+        <div class="toast-body d-flex align-items-center fw-medium">
+          <i class="bi bi-check-circle-fill text-success me-2 fs-5"></i>
+          {{ toastMessage }}
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" (click)="showToast = false"></button>
+      </div>
+    </div>
+  </div>
+
+</div>

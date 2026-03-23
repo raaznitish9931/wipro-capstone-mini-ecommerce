@@ -1,0 +1,61 @@
+.payment-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.payment-card {
+  border-radius: 12px;
+  background: white;
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.method-option {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background-color: #fcfcfc;
+  cursor: pointer;
+}
+
+.method-option.selected {
+  border-color: #0d6efd;
+  background-color: #f0f6ff;
+}
+
+.form-control, .form-select {
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ced4da;
+  background-color: #fcfcfc;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #0d6efd;
+  box-shadow: none;
+  background-color: #fff;
+}
+
+.custom-navbar {
+  background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%) !important;
+}
+
+.btn-primary-custom {
+  background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%) !important;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+}
+
+/* Force override of any animations per user rules */
+.btn-primary-custom, .method-option, .form-control {
+  transition: none !important;
+  animation: none !important;
+}
+
+.btn-primary-custom:hover {
+  background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%) !important;
+  transform: none;
+}
