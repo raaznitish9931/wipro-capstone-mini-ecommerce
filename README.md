@@ -1,3 +1,6 @@
+Here is your **final updated README.md** with **Prometheus, Zipkin, Swagger, and Grafana** added properly in a clean and professional way 👇
+
+---
 
 # Mini E-commerce Application (Microservices Architecture)
 
@@ -43,7 +46,6 @@ The project is designed using Microservices Architecture, where each service wor
 * Kafka (for asynchronous communication)
 * MySQL (Database)
 
-
 ### Frontend
 
 * Angular
@@ -51,6 +53,13 @@ The project is designed using Microservices Architecture, where each service wor
 * HTML
 * CSS
 * Bootstrap
+
+### Monitoring and Documentation Tools
+
+* Prometheus (for metrics collection)
+* Grafana (for monitoring dashboards)
+* Zipkin (for distributed tracing)
+* Swagger (for API documentation and testing)
 
 ### Tools
 
@@ -71,6 +80,9 @@ The project is designed using Microservices Architecture, where each service wor
 * Inter-service communication using Feign
 * Asynchronous processing using Kafka
 * Fault handling using circuit breaker concept
+* API documentation using Swagger
+* Distributed tracing using Zipkin
+* System monitoring using Prometheus and Grafana
 
 ---
 
@@ -119,6 +131,19 @@ Used to prevent cascading failures when a service becomes unavailable.
 
 ---
 
+## Observability and Monitoring
+
+The project includes monitoring and tracing tools to track system performance and behavior:
+
+* Prometheus is used to collect application metrics
+* Grafana is used to visualize metrics through dashboards
+* Zipkin is used for distributed tracing across microservices
+* Swagger is used to document and test APIs
+
+These tools help in debugging, monitoring performance, and understanding service communication.
+
+---
+
 ## Problem Faced
 
 When one microservice was stopped, the entire application stopped working.
@@ -158,7 +183,6 @@ Start the services in the following order:
 
 ### Step 2: Start Kafka
 
-
 * Start Kafka Server
 
 ---
@@ -175,7 +199,7 @@ Open the application in the browser:
 
 ---
 
-## API Testing (Postman)
+## API Testing (Postman / Swagger)
 
 ### User APIs
 
@@ -189,6 +213,8 @@ GET /product/all
 ### Order APIs
 
 POST /order/place
+
+Swagger can also be used to test APIs through browser interface.
 
 ---
 
@@ -218,6 +244,8 @@ The application includes:
 * Feign client configuration issues
 * Kafka setup complexity
 * Managing multiple microservice ports
+* Monitoring setup using Prometheus and Grafana
+* Distributed tracing setup using Zipkin
 
 ---
 
@@ -235,17 +263,22 @@ The application includes:
 Nitish Kumar
 Wipro Capstone Project
 
+---
+
 ## Project Guidance
 
 This project was successfully completed under the guidance of:
+
 Mr. Jayanta K Das
 
 His support and guidance helped in understanding:
 
-Microservices Architecture
-Spring Boot & Angular integration
-Real-world project structure
-Best practices for development
+* Microservices Architecture
+* Spring Boot and Angular integration
+* Real-world project structure
+* Best development practices
+
+---
 
 ## Conclusion
 
@@ -254,4 +287,5 @@ This project helped in understanding:
 * Microservices architecture in real-world applications
 * Communication between distributed services
 * Handling failures using resilience patterns
+* Monitoring and tracing using modern tools
 
