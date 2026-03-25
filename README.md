@@ -42,7 +42,7 @@ The project is designed using Microservices Architecture, where each service wor
 * OpenFeign (for synchronous communication)
 * Kafka (for asynchronous communication)
 * MySQL (Database)
-* JPA / Hibernate
+
 
 ### Frontend
 
@@ -158,7 +158,7 @@ Start the services in the following order:
 
 ### Step 2: Start Kafka
 
-* Start Zookeeper
+
 * Start Kafka Server
 
 ---
@@ -235,16 +235,17 @@ The application includes:
 Nitish Kumar
 Wipro Capstone Project
 
+## Project Guidance
+
 This project was successfully completed under the guidance of:
 Mr. Jayanta K Das
+
 His support and guidance helped in understanding:
 
 Microservices Architecture
 Spring Boot & Angular integration
 Real-world project structure
 Best practices for development
-
----
 
 ## Conclusion
 
