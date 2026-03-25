@@ -48,7 +48,6 @@ public class UserServiceImplTest {
         user.setAddress("Bhopal");
     }
 
-    // ✅ Test Create User
     @Test
     void testCreateUser() {
         when(userRepository.existsByEmail(userDto.getEmail())).thenReturn(false);
@@ -57,10 +56,10 @@ public class UserServiceImplTest {
         String result = userServiceImpl.createUser(userDto);
 
         assertEquals("User Created Successfully", result);
+        verify(userRepository, times(1)).existsByEmail(userDto.getEmail());
         verify(userRepository, times(1)).save(any(User.class));
     }
 
-    // ✅ Test Update User
     @Test
     void testUpdateUser() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
@@ -73,7 +72,6 @@ public class UserServiceImplTest {
         verify(userRepository, times(1)).save(any(User.class));
     }
 
-    // ✅ Test Update User - Not Found
     @Test
     void testUpdateUser_NotFound() {
         when(userRepository.findById(1L)).thenReturn(Optional.empty());
@@ -81,9 +79,10 @@ public class UserServiceImplTest {
         assertThrows(ResourceNotFoundException.class, () -> {
             userServiceImpl.updateUser(1L, userDto);
         });
+
+        verify(userRepository, times(1)).findById(1L);
     }
 
-    // ✅ Test Delete User
     @Test
     void testDeleteUser() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
@@ -91,10 +90,10 @@ public class UserServiceImplTest {
 
         userServiceImpl.deleteUser(1L);
 
+        verify(userRepository, times(1)).findById(1L);
         verify(userRepository, times(1)).delete(user);
     }
 
-    // ✅ Test Delete User - Not Found
     @Test
     void testDeleteUser_NotFound() {
         when(userRepository.findById(1L)).thenReturn(Optional.empty());
@@ -102,5 +101,7 @@ public class UserServiceImplTest {
         assertThrows(ResourceNotFoundException.class, () -> {
             userServiceImpl.deleteUser(1L);
         });
+
+        verify(userRepository, times(1)).findById(1L);
     }
 }

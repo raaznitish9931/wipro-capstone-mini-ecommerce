@@ -1,16 +1,4 @@
-<nav class="navbar navbar-expand-lg px-4 custom-navbar shadow-sm py-3 mb-4 text-white">
-  <div class="d-flex align-items-center w-100">
-    <div class="bg-white rounded p-1 me-2 d-flex align-items-center justify-content-center"
-      style="width: 32px; height: 32px;">
-      <i class="bi bi-shop text-primary"></i>
-    </div>
-    <a class="navbar-brand fw-bold text-white mb-0" href="javascript:void(0)">Storefront</a>
-    <div class="ms-auto">
-      <a routerLink="/cart" class="text-white text-decoration-none fw-medium"><i class="bi bi-cart me-1"></i> Return to
-        Cart</a>
-    </div>
-  </div>
-</nav>
+<app-navbar></app-navbar>
 
 <div class="container py-4 payment-container">
 
@@ -31,7 +19,6 @@
 
     <h5 class="fw-bold mb-3">Select Payment Method</h5>
 
-    <!-- Debit Card Option -->
     <div class="method-option d-flex align-items-center border-0shadow-sm" [class.selected]="paymentMethod === 'debit'"
       (click)="paymentMethod = 'debit'">
       <div class="form-check m-0 d-flex align-items-center w-100">
@@ -44,7 +31,7 @@
       </div>
     </div>
 
-    <!-- Credit Card Option -->
+   
     <div class="method-option d-flex align-items-center shadow-sm" [class.selected]="paymentMethod === 'credit'"
       (click)="paymentMethod = 'credit'">
       <div class="form-check m-0 d-flex align-items-center w-100">
@@ -57,7 +44,7 @@
       </div>
     </div>
 
-    <!-- UPI Option -->
+
     <div class="method-option d-flex align-items-center shadow-sm" [class.selected]="paymentMethod === 'upi'"
       (click)="paymentMethod = 'upi'">
       <div class="form-check m-0 d-flex align-items-center w-100">
@@ -115,7 +102,7 @@
     </button>
   </div>
 
-  <!-- Success Message -->
+
   <div *ngIf="paymentSuccess" class="payment-card text-center p-5">
     <div class="d-inline-flex justify-content-center align-items-center bg-success bg-opacity-10 rounded-circle mb-4"
       style="width: 90px; height: 90px;">

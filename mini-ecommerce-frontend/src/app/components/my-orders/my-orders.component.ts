@@ -20,7 +20,7 @@ export class MyOrdersComponent implements OnInit {
   user: User | null = null;
   myOrders: Order[] = [];
 
-  // Modal State
+ 
   isModalOpen: boolean = false;
   selectedOrderId: string | number | undefined = undefined;
 
@@ -57,7 +57,7 @@ export class MyOrdersComponent implements OnInit {
   onModalConfirm(): void {
     if (this.selectedOrderId) {
       this.orderService.cancelOrder(this.selectedOrderId);
-      this.loadOrders(); // Refresh the list
+      this.loadOrders(); 
     }
     this.closeModal();
   }

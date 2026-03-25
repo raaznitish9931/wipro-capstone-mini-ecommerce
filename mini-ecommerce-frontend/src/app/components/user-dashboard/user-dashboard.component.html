@@ -3,7 +3,7 @@
 <div class="container-fluid px-2 px-md-4 py-4">
 
   <!-- Hero Search & Filter Section -->
-  <div class="hero-search-container rounded-4 mb-4 p-4 p-md-5 position-relative overflow-hidden shadow-sm"
+  <div class="hero-search-container rounded-4 mb-4 p-4 p-lg-5 position-relative overflow-hidden shadow-sm"
     style="background: linear-gradient(135deg, #1e293b 0%, #3b82f6 100%);">
     <div class="position-absolute top-0 end-0 bg-white opacity-25"
       style="width: 300px; height: 300px; border-radius: 50%; transform: translate(30%, -30%); filter: blur(40px);">
@@ -13,7 +13,7 @@
     </div>
 
     <div class="position-relative z-1 text-center">
-      <h2 class="text-white fw-bold mb-4">Welcome, {{ user?.name }}! What are you looking for today?</h2>
+      <h2 class="text-white fw-bold mb-4 fs-3 fs-md-2">Welcome, {{ user?.name }}! <span class="d-none d-md-inline">What are you looking for today?</span></h2>
 
       <!-- Clean Minimalist Search Bar -->
       <div class="mx-auto" style="max-width: 600px;">
@@ -76,7 +76,7 @@
     <div class="col-12 col-md-8 text-center">
       <div class="card border-0 shadow-sm rounded-4 p-5 bg-white">
         <i class="bi bi-cone-striped display-1 text-warning mb-3 d-inline-block"></i>
-        <h3 class="fw-bolder text-dark mb-2">{{ errorMessage }}</h3>
+        <h3 class="fw-bolder text-danger mb-2">{{ errorMessage }}</h3>
         <p class="text-muted fw-medium mb-4">We are experiencing technical difficulties connecting to our services. Please ensure microservices are actively running.</p>
         <button class="btn btn-primary-custom px-4 py-2 rounded-pill fw-bold shadow-sm" (click)="loadProducts()">Retry Connection</button>
       </div>

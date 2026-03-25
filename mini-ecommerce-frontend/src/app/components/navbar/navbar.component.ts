@@ -15,6 +15,7 @@ import { CartService } from '../../services/cart.service';
 export class NavbarComponent implements OnInit {
   user: User | null = null;
   isDropdownOpen = false;
+  isNavbarCollapsed = true;
 
   constructor(private authService: AuthService, private router: Router, private cartService: CartService) {}
 

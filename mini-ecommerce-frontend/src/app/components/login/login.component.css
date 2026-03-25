@@ -133,3 +133,16 @@
 .animate-shake {
   animation: shake 0.4s ease-in-out;
 }
+
+@media (max-width: 767.98px) {
+  .login-card {
+    border-radius: 0;
+    margin: 0;
+  }
+  
+  .left-panel,
+  .form-panel {
+    min-height: auto;
+    padding: 2.5rem 1.5rem !important;
+  }
+}

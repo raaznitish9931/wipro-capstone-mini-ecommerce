@@ -146,7 +146,10 @@
         <hr class="my-5 opacity-10">
 
         <div class="d-flex justify-content-between align-items-center mt-2">
-          <p class="text-success mb-0 fw-bold">{{ message }}</p>
+          <p class="mb-0 fw-bold" [ngClass]="message.toLowerCase().includes('fail') || message.toLowerCase().includes('unable') ? 'text-danger' : 'text-success'">
+            <i class="bi me-1" [ngClass]="message.toLowerCase().includes('fail') || message.toLowerCase().includes('unable') ? 'bi-exclamation-circle-fill' : 'bi-check-circle-fill'" *ngIf="message"></i>
+            {{ message }}
+          </p>
           <button type="submit" class="btn btn-primary-custom px-5" [disabled]="productForm.invalid">
             <i class="bi bi-cloud-check-fill me-2"></i> {{ isEditMode ? 'Commit Changes' : 'Publish Product' }}
           </button>

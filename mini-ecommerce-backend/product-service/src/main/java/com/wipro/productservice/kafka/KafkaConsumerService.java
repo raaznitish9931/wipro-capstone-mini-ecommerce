@@ -16,7 +16,7 @@ public class KafkaConsumerService {
     private ProductRepository productRepository;
 
     @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate; // ✅ ADD THIS
+    private KafkaTemplate<String, String> kafkaTemplate; 
 
     @KafkaListener(topics = "order-topic", groupId = "product-group")
     public void consume(OrderEvent event) {
@@ -24,7 +24,7 @@ public class KafkaConsumerService {
         Product product = productRepository.findById(event.getProductId()).orElse(null);
 
         if (product == null) {
-            System.out.println("❌ Product not found for ID: " + event.getProductId());
+            System.out.println(" Product not found for ID: " + event.getProductId());
             return;
         }
 
@@ -39,11 +39,10 @@ public class KafkaConsumerService {
                 break;
 
             default:
-                System.out.println("⚠️ Unknown event type: " + event.getEvent());
+                System.out.println("Unknown event type: " + event.getEvent());
         }
     }
 
-    // ================= ORDER CREATED =================
     private void handleOrderCreated(OrderEvent event, Product product) {
 
         int updatedQty = product.getQuantity() - event.getQuantity();
@@ -52,12 +51,12 @@ public class KafkaConsumerService {
 
         String message = "id = " + event.getProductId() + ", updatedStock = " + updatedQty;
 
-        System.out.println(message); // optional
+        System.out.println(message); 
 
-        kafkaTemplate.send("stock-topic", message); // ✅ MAIN FIX
+        kafkaTemplate.send("stock-topic", message); 
     }
 
-    // ================= ORDER CANCELLED =================
+  
     private void handleOrderCancelled(OrderEvent event, Product product) {
 
         int updatedQty = product.getQuantity() + event.getQuantity();
@@ -66,8 +65,8 @@ public class KafkaConsumerService {
 
         String message = "id = " + event.getProductId() + ", updatedStock = " + updatedQty;
 
-        System.out.println(message); // optional
+        System.out.println(message); 
 
-        kafkaTemplate.send("stock-topic", message); // ✅ MAIN FIX
+        kafkaTemplate.send("stock-topic", message); 
     }
 }

@@ -83,10 +83,10 @@ categories: string[] = [
         this.filteredProducts = data;
         this.loading = false;
       },
-      error: () => {
+      error: (err) => {
         this.loading = false;
-        this.message = 'Service is currently unavailable. Please try again later.';
-      }
+        this.message = err.error?.message || 'Service is currently unavailable. Please try again later.';
+      },
     });
   }
 

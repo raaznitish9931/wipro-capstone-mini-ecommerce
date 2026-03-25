@@ -24,15 +24,13 @@ export class AuthService {
         return this.http.get<User[]>(`${this.baseUrl}/user-r`);
       }),
       map((users: User[]) => {
-        // Filter users by exact email match
+      
         const matchedUsers = users.filter(u => u.email?.toLowerCase() === email.toLowerCase());
 
         if (matchedUsers.length === 0) {
           throw new Error('User account not found');
         }
 
-        // If multiple accounts exist (buggy data), we should be careful. 
-        // For now, prioritize the role that was likely intended or log it.
         if (matchedUsers.length > 1) {
           console.warn('Multiple accounts found for this email. Data integrity issue suspected.');
         }

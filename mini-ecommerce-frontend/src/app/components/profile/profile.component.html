@@ -23,7 +23,7 @@
             <small class="text-muted" *ngIf="isEditMode">Email cannot be changed.</small>
           </div>
 
-          <!-- Password Fields (Only in Edit Mode) -->
+          
           <div *ngIf="isEditMode" class="card bg-light border-0 p-3 mb-4 rounded-3 shadow-sm">
             <h6 class="fw-bold text-dark mb-3">Change Password</h6>
             <div class="mb-3">
@@ -36,13 +36,12 @@
             </div>
           </div>
 
-          <!-- Phone Number Field -->
+       
           <div class="mb-3">
             <label class="form-label text-muted fw-bold small">Phone Number</label>
             <input type="tel" class="form-control" [readOnly]="!isEditMode" [(ngModel)]="user!.phone" [ngClass]="{'bg-light border-0 shadow-none': !isEditMode}" placeholder="Eg: 9876543210" pattern="^[0-9]{10}$">
           </div>
 
-          <!-- Address Field -->
           <div class="mb-4">
             <label class="form-label text-muted fw-bold small">Address</label>
             <textarea class="form-control" rows="3" [readOnly]="!isEditMode" [(ngModel)]="user!.address" [ngClass]="{'bg-light border-0 shadow-none': !isEditMode}" placeholder="Enter your full address..."></textarea>

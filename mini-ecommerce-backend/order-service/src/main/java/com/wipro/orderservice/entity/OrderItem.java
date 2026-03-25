@@ -1,3 +1,4 @@
+
 package com.wipro.orderservice.entity;
 
 import jakarta.persistence.Entity;
@@ -29,6 +30,28 @@ public class OrderItem {
         this.quantity = quantity;
         this.price = price;
     }
+
+   
+    public void validateItem() {
+        if (orderId < 0) {
+            throw new RuntimeException("Invalid order id");
+        }
+        if (productId <= 0) {
+            throw new RuntimeException("Invalid product id");
+        }
+        if (quantity <= 0) {
+            throw new RuntimeException("Quantity must be greater than 0");
+        }
+        if (price < 0) {
+            throw new RuntimeException("Price cannot be negative");
+        }
+    }
+
+    public double getSubTotal() {
+        return quantity * price;
+    }
+
+
 
     public int getId() {
         return id;

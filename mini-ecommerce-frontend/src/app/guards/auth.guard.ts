@@ -12,7 +12,7 @@ export const authGuard: CanActivateFn = (route, state) => {
     return false;
   }
 
-  // Check role-based access
+  
   const path = state.url;
   const role = user.role?.toUpperCase();
 

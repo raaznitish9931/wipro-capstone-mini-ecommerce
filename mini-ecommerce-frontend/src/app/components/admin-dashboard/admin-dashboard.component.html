@@ -6,10 +6,14 @@
     <p class="text-muted fs-5">Manage your entire product catalogue and secure inventory.</p>
   </div>
 
+  <div *ngIf="errorMessage" class="alert alert-danger shadow-sm mb-4 text-center fw-bold">
+    <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ errorMessage }}
+  </div>
+
   <div class="row g-4 justify-content-center">
-    <!-- Card 1 -->
-    <div class="col-md-4">
-      <a routerLink="/add-product" class="card shadow-sm admin-card card-primary p-5 text-center h-100">
+  
+    <div class="col-12 col-sm-6 col-md-4">
+      <a routerLink="/add-product" class="card shadow-sm admin-card card-primary p-4 p-md-5 text-center h-100">
         <div class="icon-wrapper">
           <i class="bi bi-node-plus-fill"></i>
         </div>
@@ -18,9 +22,9 @@
       </a>
     </div>
 
-    <!-- Card 2 -->
-    <div class="col-md-4">
-      <a routerLink="/product-list" class="card shadow-sm admin-card card-success p-5 text-center h-100">
+    
+    <div class="col-12 col-sm-6 col-md-4">
+      <a routerLink="/product-list" class="card shadow-sm admin-card card-success p-4 p-md-5 text-center h-100">
         <div class="icon-wrapper">
           <i class="bi bi-view-list"></i>
         </div>
@@ -29,9 +33,9 @@
       </a>
     </div>
 
-    <!-- Card 3 -->
-    <div class="col-md-4">
-      <a routerLink="/product-list" class="card shadow-sm admin-card card-warning p-5 text-center h-100">
+  
+    <div class="col-12 col-sm-6 col-md-4">
+      <a routerLink="/product-list" class="card shadow-sm admin-card card-warning p-4 p-md-5 text-center h-100">
         <div class="icon-wrapper">
           <i class="bi bi-box-seam-fill"></i>
         </div>

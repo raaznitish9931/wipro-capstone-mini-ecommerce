@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { ProductService } from '../../services/product.service';
 import { User } from '../../models/user';
 import { NavbarComponent } from '../navbar/navbar.component';
 
@@ -17,8 +18,11 @@ export class AdminDashboardComponent implements OnInit {
   user: User | null = null;
   isDropdownOpen = false;
 
+  errorMessage = '';
+
   constructor(
     private authService: AuthService,
+    private productService: ProductService,
     private router: Router
   ) {}
 
@@ -27,7 +31,20 @@ export class AdminDashboardComponent implements OnInit {
 
     if (!this.user || this.user.role?.toUpperCase() !== 'ADMIN') {
       this.router.navigate(['/login']);
+    } else {
+      this.checkServiceHealth();
     }
+  }
+
+  checkServiceHealth(): void {
+    this.productService.getAllProducts().subscribe({
+      next: () => {
+        this.errorMessage = '';
+      },
+      error: (err) => {
+        this.errorMessage = err.error?.message || 'Unable to load services. Please ensure microservices are running.';
+      }
+    });
   }
 
   logout(): void {

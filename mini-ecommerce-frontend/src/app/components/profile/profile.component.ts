@@ -17,7 +17,7 @@ export class ProfileComponent implements OnInit {
 
   user: User | null = null;
   isEditMode = false;
-  
+
   oldPasswordText = '';
   newPasswordText = '';
 
@@ -25,7 +25,7 @@ export class ProfileComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.user = this.authService.getLoggedInUser();
@@ -44,11 +44,11 @@ export class ProfileComponent implements OnInit {
       if (this.newPasswordText) {
         this.user.password = this.newPasswordText;
       }
-      
+
       sessionStorage.setItem('loggedInUser', JSON.stringify(this.user));
       alert("Profile updated successfully!");
       this.isEditMode = false;
-      
+
       const role = this.user?.role?.toUpperCase();
       if (role === 'ADMIN') {
         this.router.navigate(['/admin-dashboard']);

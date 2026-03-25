@@ -1,4 +1,4 @@
-/* --- Modern Theme CSS --- */
+
 :host {
   display: block;
   min-height: 100vh;
@@ -13,7 +13,7 @@
   -webkit-text-fill-color: transparent;
 }
 
-/* Base Card Styling */
+
 .product-card {
   border: none !important;
   background: rgba(255, 255, 255, 0.9);
@@ -22,7 +22,7 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04) !important;
 }
 
-/* Image Section */
+
 .product-img-wrapper {
   height: 200px;
   background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
@@ -40,7 +40,7 @@
   object-fit: contain;
 }
 
-/* Badges */
+
 .new-badge {
   background: linear-gradient(135deg, #ff416c, #ff4b2b);
   color: white;
@@ -58,7 +58,7 @@
   border: 1px solid rgba(226, 232, 240, 0.8);
 }
 
-/* Updated Professional Buttons */
+
 .btn-primary-custom {
   background: linear-gradient(135deg, #1f2a44 0%, #3b82f6 100%);
   border: none;
@@ -72,7 +72,7 @@
   border-color: #10b981 !important;
 }
 
-/* Typography & Layout */
+
 .fs-7 {
   font-size: 0.80rem;
 }
@@ -138,14 +138,13 @@
   align-items: center;
   justify-content: center;
   font-weight: 800;
-  /* Prominent Quantity */
+ 
   font-size: 0.95rem;
 }
 
-/* Unify button styling - FIXED HEIGHT to prevent UI jump */
 .action-btn {
   height: 40px !important;
-  /* Forces absolute stability */
+
   max-height: 40px !important;
   display: flex !important;
   align-items: center !important;

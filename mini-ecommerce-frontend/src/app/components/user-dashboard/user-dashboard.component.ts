@@ -88,7 +88,7 @@ export class UserDashboardComponent implements OnInit {
       error: (err) => {
         console.error('Microservice Error:', err);
         this.loading = false;
-        this.errorMessage = 'Service is currently unavailable. Please try again later.';
+        this.errorMessage = err.error?.message || 'Unable to load services. Please ensure microservices are running.';
       }
     });
   }

@@ -1,232 +1,6 @@
 
-// package com.wipro.orderservice.service;
-
-// import java.time.LocalDate;
-// import java.time.LocalDateTime;
-// import java.util.ArrayList;
-// import java.util.List;
-// import java.util.Map;
-// import java.util.Optional;
-
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.kafka.core.KafkaTemplate;
-// import org.springframework.stereotype.Service;
-
-// import com.wipro.orderservice.dto.OrderEvent;
-// import com.wipro.orderservice.dto.OrderRequestDto;
-// import com.wipro.orderservice.dto.OrderResponseDto;
-// import com.wipro.orderservice.entity.Orders;
-// import com.wipro.orderservice.feign.ProductClient;
-// import com.wipro.orderservice.feign.UserClient;
-// import com.wipro.orderservice.repository.OrderRepository;
-
-// @Service
-// public class OrderServiceImpl implements OrderService {
-
-//     @Autowired
-//     OrderRepository orderRepository;
-
-//     @Autowired
-//     ProductClient productFeignClient;
-
-//     @Autowired
-//     UserClient userFeignClient;
-
-//     // ✅ UPDATED Kafka
-//     @Autowired
-//     private KafkaTemplate<String, Object> kafkaTemplate;
-
-//     @Override
-//     public OrderResponseDto createOrder(OrderRequestDto orderRequestDto) {
-
-//         Object userObj = userFeignClient.getUserById(orderRequestDto.getUserId());
-//         Map<String, Object> userMap = (Map<String, Object>) userObj;
-
-//         if (userMap == null || userMap.get("id") == null) {
-//             return null;
-//         }
-
-//         Object productObj = productFeignClient.getProductById(orderRequestDto.getProductId());
-//         Map<String, Object> productMap = (Map<String, Object>) productObj;
-
-//         if (productMap == null || productMap.get("id") == null) {
-//             return null;
-//         }
-
-//         if (orderRequestDto.getQuantity() <= 0) {
-//             return null;
-//         }
-
-//         int currentQty = ((Number) productMap.get("quantity")).intValue();
-//         double price = ((Number) productMap.get("price")).doubleValue();
-
-//         if (currentQty < orderRequestDto.getQuantity()) {
-//             return null;
-//         }
-
-//         // Stock decrement is now handled asynchronously by the Product Service via Kafka
-//         // to avoid the "double decrement" bug.
-
-//         Orders order = new Orders();
-//         order.setUserId(orderRequestDto.getUserId());
-//         order.setProductId(orderRequestDto.getProductId());
-//         order.setQuantity(orderRequestDto.getQuantity());
-//         order.setTotalPrice(price * orderRequestDto.getQuantity());
-//         order.setStatus("PLACED");
-//         order.setOrderDate(LocalDate.now());
-
-//         Orders savedOrder = orderRepository.save(order);
-
-//         // ✅ Kafka JSON Event (CREATE)
-//         String productName = (String) productMap.get("name");
-
-//         OrderEvent event = new OrderEvent(
-//                 "ORDER_CREATED",
-//                 savedOrder.getId(),
-//                 savedOrder.getProductId(),
-//                 productName,
-//                 savedOrder.getQuantity(),
-//                 LocalDateTime.now()
-//         );
-
-//         kafkaTemplate.send("order-topic", event);
-//         System.out.println("Kafka Sent: ORDER_CREATED");
-
-//         OrderResponseDto dto = new OrderResponseDto();
-//         dto.setId(savedOrder.getId());
-//         dto.setUserId(savedOrder.getUserId());
-//         dto.setProductId(savedOrder.getProductId());
-//         dto.setQuantity(savedOrder.getQuantity());
-//         dto.setTotalPrice(savedOrder.getTotalPrice());
-//         dto.setStatus(savedOrder.getStatus());
-//         dto.setOrderDate(savedOrder.getOrderDate());
-
-//         return dto;
-//     }
-
-//     @Override
-//     public OrderResponseDto cancelOrder(int orderId) {
-
-//         Optional<Orders> optOrder = orderRepository.findById(orderId);
-
-//         if (!optOrder.isEmpty()) {
-//             Orders order = optOrder.get();
-
-//             Object productObj = productFeignClient.getProductById(order.getProductId());
-//             Map<String, Object> productMap = (Map<String, Object>) productObj;
-
-//             if (productMap != null && productMap.get("id") != null) {
-//                 // Stock restoration is now handled asynchronously by the Product Service via Kafka
-//                 // to avoid the "double restoration" bug.
-//             }
-
-//             order.setStatus("CANCELLED");
-//             Orders cancelledOrder = orderRepository.save(order);
-
-//             // ✅ Kafka JSON Event (CANCEL)
-//             String productName = (String) productMap.get("name");
-
-//             OrderEvent event = new OrderEvent(
-//                     "ORDER_CANCELLED",
-//                     orderId,
-//                     order.getProductId(),
-//                     productName,
-//                     order.getQuantity(),
-//                     LocalDateTime.now()
-//             );
-
-//             kafkaTemplate.send("order-topic", event);
-//             System.out.println("Kafka Sent: ORDER_CANCELLED");
-
-//             OrderResponseDto dto = new OrderResponseDto();
-//             dto.setId(cancelledOrder.getId());
-//             dto.setUserId(cancelledOrder.getUserId());
-//             dto.setProductId(cancelledOrder.getProductId());
-//             dto.setQuantity(cancelledOrder.getQuantity());
-//             dto.setTotalPrice(cancelledOrder.getTotalPrice());
-//             dto.setStatus(cancelledOrder.getStatus());
-//             dto.setOrderDate(cancelledOrder.getOrderDate());
-
-//             return dto;
-//         }
-
-//         return null;
-//     }
-
-//     @Override
-//     public List<OrderResponseDto> viewAllOrders() {
-
-//         List<Orders> list = orderRepository.findAll();
-//         List<OrderResponseDto> responseList = new ArrayList<>();
-
-//         for (Orders order : list) {
-//             OrderResponseDto dto = new OrderResponseDto();
-//             dto.setId(order.getId());
-//             dto.setUserId(order.getUserId());
-//             dto.setProductId(order.getProductId());
-//             dto.setQuantity(order.getQuantity());
-//             dto.setTotalPrice(order.getTotalPrice());
-//             dto.setStatus(order.getStatus());
-//             dto.setOrderDate(order.getOrderDate());
-
-//             responseList.add(dto);
-//         }
-
-//         return responseList;
-//     }
-
-//     @Override
-//     public List<OrderResponseDto> viewOrdersByUserId(int userId) {
-
-//         List<Orders> list = orderRepository.findByUserId(userId);
-//         List<OrderResponseDto> responseList = new ArrayList<>();
-
-//         for (Orders order : list) {
-//             OrderResponseDto dto = new OrderResponseDto();
-//             dto.setId(order.getId());
-//             dto.setUserId(order.getUserId());
-//             dto.setProductId(order.getProductId());
-//             dto.setQuantity(order.getQuantity());
-//             dto.setTotalPrice(order.getTotalPrice());
-//             dto.setStatus(order.getStatus());
-//             dto.setOrderDate(order.getOrderDate());
-
-//             responseList.add(dto);
-//         }
-
-//         return responseList;
-//     }
-
-//     @Override
-//     public OrderResponseDto viewOrderById(int orderId) {
-
-//         Optional<Orders> optOrder = orderRepository.findById(orderId);
-
-//         if (!optOrder.isEmpty()) {
-//             Orders order = optOrder.get();
-
-//             OrderResponseDto dto = new OrderResponseDto();
-//             dto.setId(order.getId());
-//             dto.setUserId(order.getUserId());
-//             dto.setProductId(order.getProductId());
-//             dto.setQuantity(order.getQuantity());
-//             dto.setTotalPrice(order.getTotalPrice());
-//             dto.setStatus(order.getStatus());
-//             dto.setOrderDate(order.getOrderDate());
-
-//             return dto;
-//         }
-
-//         return null;
-//     }
-// }
-
-
-
-
 package com.wipro.orderservice.service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -262,9 +36,6 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private KafkaTemplate<String, Object> kafkaTemplate;
 
-    // ================================
-    // 🔥 CREATE ORDER (WITH CB)
-    // ================================
     @Override
     @CircuitBreaker(name = "productService", fallbackMethod = "fallbackCreateOrder")
     public OrderResponseDto createOrder(OrderRequestDto orderRequestDto) {
@@ -283,30 +54,31 @@ public class OrderServiceImpl implements OrderService {
             throw new RuntimeException("Product not found");
         }
 
+        int currentQty = ((Number) productMap.get("quantity")).intValue();
+        double price = ((Number) productMap.get("price")).doubleValue();
+
         if (orderRequestDto.getQuantity() <= 0) {
             throw new RuntimeException("Invalid quantity");
         }
-
-        int currentQty = ((Number) productMap.get("quantity")).intValue();
-        double price = ((Number) productMap.get("price")).doubleValue();
 
         if (currentQty < orderRequestDto.getQuantity()) {
             throw new RuntimeException("Insufficient stock");
         }
 
+      
         Orders order = new Orders();
-        order.setUserId(orderRequestDto.getUserId());
-        order.setProductId(orderRequestDto.getProductId());
-        order.setQuantity(orderRequestDto.getQuantity());
-        order.setTotalPrice(price * orderRequestDto.getQuantity());
-        order.setStatus("PLACED");
-        order.setOrderDate(LocalDate.now());
+        order.createOrder(
+                orderRequestDto.getUserId(),
+                orderRequestDto.getProductId(),
+                orderRequestDto.getQuantity(),
+                price
+        );
+        order.validateOrder();
 
         Orders savedOrder = orderRepository.save(order);
 
         String productName = (String) productMap.get("name");
 
-        // ✅ Kafka Event (SAFE)
         OrderEvent event = new OrderEvent(
                 "ORDER_CREATED",
                 savedOrder.getId(),
@@ -317,26 +89,13 @@ public class OrderServiceImpl implements OrderService {
         );
 
         kafkaTemplate.send("order-topic", event);
-        System.out.println("✅ Kafka Sent: ORDER_CREATED");
+        System.out.println("Kafka Sent: ORDER_CREATED");
 
-        OrderResponseDto dto = new OrderResponseDto();
-        dto.setId(savedOrder.getId());
-        dto.setUserId(savedOrder.getUserId());
-        dto.setProductId(savedOrder.getProductId());
-        dto.setQuantity(savedOrder.getQuantity());
-        dto.setTotalPrice(savedOrder.getTotalPrice());
-        dto.setStatus(savedOrder.getStatus());
-        dto.setOrderDate(savedOrder.getOrderDate());
-
-        return dto;
+        return convertToDto(savedOrder);
     }
 
-    // ================================
-    // 🔥 FALLBACK METHOD
-    // ================================
     public OrderResponseDto fallbackCreateOrder(OrderRequestDto orderRequestDto, Exception ex) {
-
-        System.out.println("⚠️ Circuit Breaker Triggered (CREATE ORDER)");
+        System.out.println("Circuit Breaker Triggered (CREATE ORDER)");
 
         OrderResponseDto dto = new OrderResponseDto();
         dto.setStatus("FAILED");
@@ -345,9 +104,6 @@ public class OrderServiceImpl implements OrderService {
         return dto;
     }
 
-    // ================================
-    // 🔥 CANCEL ORDER (WITH CB)
-    // ================================
     @Override
     @CircuitBreaker(name = "productService", fallbackMethod = "fallbackCancelOrder")
     public OrderResponseDto cancelOrder(int orderId) {
@@ -361,12 +117,13 @@ public class OrderServiceImpl implements OrderService {
             Object productObj = productFeignClient.getProductById(order.getProductId());
             Map<String, Object> productMap = (Map<String, Object>) productObj;
 
-            order.setStatus("CANCELLED");
+            order.cancelOrder();
+            order.validateOrder();
+
             Orders cancelledOrder = orderRepository.save(order);
 
             String productName = productMap != null ? (String) productMap.get("name") : "UNKNOWN";
 
-            // ✅ Kafka Event
             OrderEvent event = new OrderEvent(
                     "ORDER_CANCELLED",
                     orderId,
@@ -377,32 +134,19 @@ public class OrderServiceImpl implements OrderService {
             );
 
             kafkaTemplate.send("order-topic", event);
-            System.out.println("✅ Kafka Sent: ORDER_CANCELLED");
+            System.out.println("Kafka Sent: ORDER_CANCELLED");
 
-            OrderResponseDto dto = new OrderResponseDto();
-            dto.setId(cancelledOrder.getId());
-            dto.setUserId(cancelledOrder.getUserId());
-            dto.setProductId(cancelledOrder.getProductId());
-            dto.setQuantity(cancelledOrder.getQuantity());
-            dto.setTotalPrice(cancelledOrder.getTotalPrice());
-            dto.setStatus(cancelledOrder.getStatus());
-            dto.setOrderDate(cancelledOrder.getOrderDate());
-
-            return dto;
+            return convertToDto(cancelledOrder);
         }
 
         return null;
     }
 
-    // 🔥 FALLBACK CANCEL
     public OrderResponseDto fallbackCancelOrder(int orderId, Exception ex) {
-        System.out.println("⚠️ Circuit Breaker Triggered (CANCEL ORDER)");
+        System.out.println("Circuit Breaker Triggered (CANCEL ORDER)");
         return null;
     }
 
-    // ================================
-    // VIEW METHODS (NO CHANGE)
-    // ================================
     @Override
     public List<OrderResponseDto> viewAllOrders() {
 
@@ -410,16 +154,7 @@ public class OrderServiceImpl implements OrderService {
         List<OrderResponseDto> responseList = new ArrayList<>();
 
         for (Orders order : list) {
-            OrderResponseDto dto = new OrderResponseDto();
-            dto.setId(order.getId());
-            dto.setUserId(order.getUserId());
-            dto.setProductId(order.getProductId());
-            dto.setQuantity(order.getQuantity());
-            dto.setTotalPrice(order.getTotalPrice());
-            dto.setStatus(order.getStatus());
-            dto.setOrderDate(order.getOrderDate());
-
-            responseList.add(dto);
+            responseList.add(convertToDto(order));
         }
 
         return responseList;
@@ -432,16 +167,7 @@ public class OrderServiceImpl implements OrderService {
         List<OrderResponseDto> responseList = new ArrayList<>();
 
         for (Orders order : list) {
-            OrderResponseDto dto = new OrderResponseDto();
-            dto.setId(order.getId());
-            dto.setUserId(order.getUserId());
-            dto.setProductId(order.getProductId());
-            dto.setQuantity(order.getQuantity());
-            dto.setTotalPrice(order.getTotalPrice());
-            dto.setStatus(order.getStatus());
-            dto.setOrderDate(order.getOrderDate());
-
-            responseList.add(dto);
+            responseList.add(convertToDto(order));
         }
 
         return responseList;
@@ -453,20 +179,21 @@ public class OrderServiceImpl implements OrderService {
         Optional<Orders> optOrder = orderRepository.findById(orderId);
 
         if (optOrder.isPresent()) {
-            Orders order = optOrder.get();
-
-            OrderResponseDto dto = new OrderResponseDto();
-            dto.setId(order.getId());
-            dto.setUserId(order.getUserId());
-            dto.setProductId(order.getProductId());
-            dto.setQuantity(order.getQuantity());
-            dto.setTotalPrice(order.getTotalPrice());
-            dto.setStatus(order.getStatus());
-            dto.setOrderDate(order.getOrderDate());
-
-            return dto;
+            return convertToDto(optOrder.get());
         }
 
         return null;
+    }
+
+    private OrderResponseDto convertToDto(Orders order) {
+        OrderResponseDto dto = new OrderResponseDto();
+        dto.setId(order.getId());
+        dto.setUserId(order.getUserId());
+        dto.setProductId(order.getProductId());
+        dto.setQuantity(order.getQuantity());
+        dto.setTotalPrice(order.getTotalPrice());
+        dto.setStatus(order.getStatus());
+        dto.setOrderDate(order.getOrderDate());
+        return dto;
     }
 }

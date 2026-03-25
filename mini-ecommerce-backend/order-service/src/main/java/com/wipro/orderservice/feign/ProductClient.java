@@ -11,7 +11,7 @@ public interface ProductClient {
     @GetMapping("/product/{id}")
     public Map<String, Object> getProductById(@PathVariable int id);
 
-    // ✅ FIXED METHOD
+  
     @PutMapping("/product/{id}")
     public Map<String, Object> updateProduct(
             @PathVariable int id,

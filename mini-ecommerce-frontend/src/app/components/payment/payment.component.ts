@@ -7,11 +7,12 @@ import { CartService } from '../../services/cart.service';
 import { OrderService } from '../../services/order.service';
 import { AuthService } from '../../services/auth.service';
 import { Order } from '../../models/order';
+import { NavbarComponent } from '../navbar/navbar.component';
 
 @Component({
   selector: 'app-payment',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, NavbarComponent],
   templateUrl: './payment.component.html',
   styleUrl: './payment.component.css'
 })
@@ -21,7 +22,7 @@ export class PaymentComponent implements OnInit {
   isProcessing: boolean = false;
   paymentSuccess: boolean = false;
 
-  // Form Fields
+
   cardNumber: string = '';
   expiry: string = '';
   cvv: string = '';
@@ -37,7 +38,7 @@ export class PaymentComponent implements OnInit {
 
   get isFormValid(): boolean {
     if (this.paymentMethod === 'credit' || this.paymentMethod === 'debit') {
-      // Very basic validation: Card number (16-19 chars with spaces), Expiry (5 chars), CVV (3 chars)
+     
       return this.cardNumber.length >= 16 &&
         this.expiry.length === 5 &&
         this.cvv.length === 3;
@@ -73,7 +74,7 @@ export class PaymentComponent implements OnInit {
         productId: item.product.id,
         quantity: item.quantity
       };
-      // Use observable to capture return IDs from backend
+      
       return this.http.post<any>('http://localhost:9999/order', backendReq);
     });
 
@@ -89,7 +90,7 @@ export class PaymentComponent implements OnInit {
 
           const backendIds = results.filter(r => r && r.id).map(r => r.id);
 
-          // 2. Save structured UI Order object locally including backend mappings
+         
           const newOrder: Order = {
             userId: userId || undefined,
             items: cartItems,

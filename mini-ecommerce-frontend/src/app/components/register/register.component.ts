@@ -35,7 +35,7 @@ export class RegisterComponent {
     private authService: AuthService,
     private router: Router,
     private http: HttpClient
-  ) {}
+  ) { }
 
   togglePassword(): void {
     this.showPassword = !this.showPassword;
@@ -61,20 +61,20 @@ export class RegisterComponent {
 
     this.isLoading = true;
 
-    // NEW: Check for existing email to prevent role confusion
+   
     this.http.get<User[]>('http://localhost:9999/user-r').subscribe({
       next: (users: User[]) => {
         const exists = users.some((u: User) => u.email?.toLowerCase() === this.user.email.toLowerCase());
         if (exists) {
-           this.errorMessage = 'Email already registered. Please use another one.';
-           this.isLoading = false;
-           return;
+          this.errorMessage = 'Email already registered. Please use another one.';
+          this.isLoading = false;
+          return;
         }
 
-        // Proceed and execute registration
+      
         this.executeRegistration();
       },
-      error: () => this.executeRegistration() // Fallback if read service fails, proceed anyway? Or show error? Let's proceed as fallback.
+      error: () => this.executeRegistration() 
     });
   }
 

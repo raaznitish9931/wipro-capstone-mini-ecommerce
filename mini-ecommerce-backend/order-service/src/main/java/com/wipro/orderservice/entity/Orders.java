@@ -1,3 +1,4 @@
+
 package com.wipro.orderservice.entity;
 
 import java.time.LocalDate;
@@ -35,6 +36,61 @@ public class Orders {
         this.status = status;
         this.orderDate = orderDate;
     }
+
+
+
+    public void createOrder(int userId, int productId, int quantity, double unitPrice) {
+        if (userId <= 0) {
+            throw new RuntimeException("Invalid user id");
+        }
+        if (productId <= 0) {
+            throw new RuntimeException("Invalid product id");
+        }
+        if (quantity <= 0) {
+            throw new RuntimeException("Quantity must be greater than 0");
+        }
+        if (unitPrice < 0) {
+            throw new RuntimeException("Unit price cannot be negative");
+        }
+
+        this.userId = userId;
+        this.productId = productId;
+        this.quantity = quantity;
+        this.totalPrice = unitPrice * quantity;
+        this.status = "PLACED";
+        this.orderDate = LocalDate.now();
+    }
+
+    public void cancelOrder() {
+        if ("CANCELLED".equalsIgnoreCase(this.status)) {
+            throw new RuntimeException("Order is already cancelled");
+        }
+
+        this.status = "CANCELLED";
+    }
+
+    public void validateOrder() {
+        if (userId <= 0) {
+            throw new RuntimeException("Invalid user id");
+        }
+        if (productId <= 0) {
+            throw new RuntimeException("Invalid product id");
+        }
+        if (quantity <= 0) {
+            throw new RuntimeException("Invalid quantity");
+        }
+        if (totalPrice < 0) {
+            throw new RuntimeException("Total price cannot be negative");
+        }
+        if (status == null || status.isBlank()) {
+            throw new RuntimeException("Order status cannot be empty");
+        }
+        if (orderDate == null) {
+            throw new RuntimeException("Order date cannot be null");
+        }
+    }
+
+
 
     public int getId() {
         return id;

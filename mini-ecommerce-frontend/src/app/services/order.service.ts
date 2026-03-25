@@ -15,7 +15,7 @@ export class OrderService {
 
   placeOrder(order: Order): void {
     const orders = this.getOrders();
-    order.orderId = 'ORD-' + Math.floor(100000 + Math.random() * 900000); // Random generated ID
+    order.orderId = 'ORD-' + Math.floor(100000 + Math.random() * 900000); 
     orders.push(order);
     sessionStorage.setItem(this.STORAGE_KEY, JSON.stringify(orders));
   }
@@ -32,7 +32,7 @@ export class OrderService {
     if (orderIndex !== -1) {
       const order = orders[orderIndex];
       
-      // Update local storage status
+     
       order.status = 'Cancelled';
       sessionStorage.setItem(this.STORAGE_KEY, JSON.stringify(orders));
 

@@ -24,7 +24,7 @@ public class OrderEvent {
         this.timestamp = timestamp;
     }
 
-    // getters & setters
+    
     public String getEvent() {
         return event;
     }
